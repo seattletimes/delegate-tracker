@@ -2,14 +2,14 @@
   "s3": {
     "stage": {
       "bucket": "projects-staging.seattletimes.com",
-      "path": "mover-hades"
+      "path": "weedy-depressor"
     },
     "live": {
       "bucket": "projects.seattletimes.com",
-      "path": ""
+      "path": "2020/local/democrats-delegate-tracker"
     }
   },
-  "title": "",
+  "title": "Delegate tracker | The Seattle Times",
   "description": "",
   "author": "",
   "url": "",
@@ -18,5 +18,5 @@
   "sheets": ["11LF6Hqq79hGrzVX0vcgWix6KEc0sZDkUPxzxX9-Nj1E"],
   "docs": [],
   "embedded": true,
-  "production": false
+  "production": true
 }
