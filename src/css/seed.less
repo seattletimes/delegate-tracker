@@ -1,0 +1,376 @@
+@import "seattletimes";
+
+@sanders: #58b7b4;
+@warren: #c45555;
+@gabbard: #d3b537;
+@biden: #4995c4;
+@bloomberg: #cc5c3e;
+@dropout-text: @df-middle-gray;
+@dropout-fill: @df-light-gray;
+
+.interactive {
+	max-width: 960px;
+}
+
+h1 {
+	margin: 0;
+	text-align: center;
+	@media @mobile {
+		font-size: 22px;
+	}
+	@media @tablet-up {
+		font-size: 28px;
+	}
+}
+
+.note {
+	color: #666;
+	font-family: @df-sans;
+	font-size: 0.8em;
+	font-style: italic;
+	margin: 0;
+}
+
+.note--timestamp {
+	margin-bottom: 15px;
+	text-align: center;
+}
+
+.flexbox {
+	@media @desktop-up {
+		display: flex;
+	}
+}
+
+#map {
+	@media @tablet {
+		margin-left: auto;
+		margin-right: auto;
+		max-width: 450px;
+		width: 100%;
+	}
+	@media @desktop-up {
+		width: 45%;
+	}
+}
+
+#tooltip {
+	background-color: #fff;
+	border: 1px solid @df-light-gray;
+	border-radius: 5px;
+	font-size: 15px;
+	line-height: 15px;
+	padding: 3px 5px;
+	position: absolute;
+	&.hidden {
+		display: none;
+	}
+	&.shown {
+		display: block;
+	}
+}
+
+.instructions {
+	font-size: 16px;
+	margin: 0 0 5px;
+	text-align: center;
+}
+
+.county {
+	cursor: pointer;
+	&:hover {
+		fill-opacity: 70%;
+		stroke: @df-dark-gray;
+		stroke-width: 4px;
+	}
+}
+
+.results-container {
+	@media @tablet {
+		width: 100%;
+	}
+	@media @desktop-up {
+		padding-left: 15px;
+		width: 55%;
+	}
+}
+
+#statewide-results {
+	border-bottom: 1px solid @df-light-gray;
+	padding-bottom: 10px;
+}
+
+h2 {
+	font-size: 20px;
+	margin: 0;
+}
+
+.candidates {
+	font-size: 15px;
+	margin-top: 5px;
+	padding-left: 0;
+	@media @tablet {
+		column-count: 2;
+		column-width: 50%;
+	}
+	@media @desktop-up {
+		column-count: 3;
+		column-width: 33.33%;
+	}
+}
+
+.candidate {
+	margin: 0;
+}
+
+.dropout {
+	color: @dropout-text;
+}
+
+.color-block {
+	border-radius: 12px;
+	display: inline-block;
+	height: 12px;
+	margin-right: 6px;
+	width: 12px;
+	&.Sanders {
+		background-color: @sanders;
+	}
+	&.Warren {
+		background-color: @warren;
+	}
+	&.Biden {
+		background-color: @biden;
+	}
+	&.Bloomberg {
+		background-color: @bloomberg;
+	}
+	&.Gabbard {
+		background-color: @gabbard;
+	}
+	&.Uncommitted {
+		background-color: @dropout-fill;
+	}
+	.dropout & {
+		background-color: @dropout-fill;
+	}
+}
+
+label {
+	color: @df-middle-gray;
+	font-size: 16px;
+}
+
+.selector {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 3px;
+  background-color: #fff;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%237E838B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+  background-repeat: no-repeat, repeat;
+  background-position: right .7em top 50%, 0 0;
+  background-size: .65em auto, 100%;
+  color: @df-off-black;
+  cursor: pointer;
+  font-size: 20px;
+  font-family: @df-sans;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-left: -4px;
+  margin-top: 10px;
+  padding: .1em 1.4em .1em 0;
+}
+.selector::-ms-expand {
+  display: none;
+}
+.selector option {
+	font-size: 14px;
+  font-weight: normal;
+}
+.selector:hover {
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%230777B3%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+  color: @df-blue;
+  option {
+  	color: @df-off-black;
+  }
+}
+
+#county-results {
+	&.hidden {
+		display: none;
+	}
+	&.shown {
+		display: block;
+	}
+}
+
+.caption::after {
+	clear: both;
+	content: "";
+	display: block;
+}
+
+.data-source, .art-credit {
+	margin: 10px 0 0 0;
+}
+
+// homepage widget
+.widget {
+	margin: auto;
+	max-width: 970px;
+	width: 100%;
+}
+
+.widget__banner {
+	background-position: 50% -24px;
+	background-size: 80px 45px;
+	background-repeat: repeat-x;
+	background-image: radial-gradient(ellipse 80px 45px,
+	#FFF 0px, #FFF 10px, #C23 10px, #C23 20px, #FFF 20px, #FFF 30px, #0777b3 30px, #0777b3 40px, #FFF 40px);
+	height: 25px;
+}
+
+.widget__hed {
+	font-size: 22px;
+	margin: 4px auto;
+}
+
+.widget__note {
+	margin: 4px auto;
+	text-align: center;
+}
+
+.widget__candidates {
+	display: flex;
+}
+
+.widget__candidate {
+	border-radius: 5px;
+	flex: 1;
+	margin-left: 5px;
+	margin-right: 5px;
+	&:first-child {
+		margin-left: 0;
+	}
+	&:last-child {
+		margin-right: 0;
+	}
+	// &.Sanders {
+	// 	background-color: lighten(@sanders, 10%);
+	// }
+	// &.Warren {
+	// 	background-color: lighten(@warren, 10%);
+	// }
+	// &.Gabbard {
+	// 	background-color: lighten(@gabbard, 10%);
+	// }
+	// &.Biden {
+	// 	background-color: lighten(@biden, 10%);
+	// }
+	// &.Bloomberg {
+	// 	background-color: lighten(@bloomberg, 10%);
+	// }
+	background-color: @df-light-gray;
+}
+
+.widget__candidate-name, .widget__candidate-percentage {
+	font-family: @df-sans;
+	font-weight: bold;
+	text-align: center;
+}
+
+.widget__candidate-name {
+	font-size: 22px;
+	line-height: 24px;
+	margin-top: 10px;
+	margin-bottom: 0;
+}
+
+.widget__candidate-percentage {
+	font-size: 28px;
+	margin-top: 0;
+	margin-bottom: 8px;
+}
+
+.widget__small-text {
+	font-size: 20px;
+}
+
+.widget__data-source {
+	float: right;
+	margin-top: 0;
+}
+
+.widget__link {
+	clear: both;
+	font-family: @df-sans;
+	margin: 10px auto 0;
+	text-align: center;
+	a {
+		border: 1px solid @df-blue;
+		border-radius: 5px;
+		padding: 2px 12px;
+	}
+	&:hover {
+		a {
+			background-color: @df-blue;
+			color: #fff;
+		}
+	}
+}
+
+// delegates tracker
+main.interactive--delegates {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.chart-outer {
+	position: relative;
+}
+
+.chart-inner {
+	position: relative;
+}
+
+.chart__g {
+	position: absolute;
+	width: 100%;
+}
+
+.chart__bar {
+	background-color: @df-blue;
+	position: absolute;
+}
+
+.graphic-text {
+	font-family: @df-sans;
+}
+
+.graphic-text--small {
+	font-size: 0.8em;
+}
+
+.names {
+	float: left;
+	margin: 0;
+	padding-right: 5px;
+	text-align: right;
+}
+
+.numbers {
+	margin-top: 0;
+	margin-bottom: 0;
+	position: absolute;
+}
+
+.delegates__caption {
+	&:after  {
+		clear: both;
+		content: "";
+		display: block;
+	}
+}
