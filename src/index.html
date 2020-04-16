@@ -1,15 +1,35 @@
-<% 
-  var results = json.results.races[0].results[0],
-    counties = Object.values(json.fips),
-    candidates = json.candidates,
+<%
+  var d3 = Object.assign({}, require("d3-scale"), require("d3-array"), require("d3-axis"));
+
+  var delegates = json.delegates.sum.parties.Dem.candidates,
+    candidates = json.candidates.filter(d => d.show_on_delegate_tracker === true),
     sorted_candidates = candidates.sort(function(a, b) {
-      return results.candidates.find(c => c.last === b.last).votes - results.candidates.find(c => c.last === a.last).votes;
-    }),
-    show_all_candidates = true;  
+      return delegates.find(c => c.name === b.last).total - delegates.find(c => c.name === a.last).total
+    });
+
+  var months = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
 
   var d = new Date(),
-    timestring = d.toLocaleTimeString("en-US").replace(/:\d+ /, ' '),
-    timestamp = timestring.split(" ")[0] + " " + timestring.split(" ")[1][0].toLowerCase() + ".m.";
+    month = months[d.getMonth()],
+    day = d.getDate(),
+    year = d.getFullYear();
+
+  var printdate = month + " " + day + ", " + year;
+
+  var margin = {top: 0, bottom: 30, left: 80, right: 50},
+    height = 300 - margin.top - margin.bottom,
+    width = "calc(100% - " + (margin.left + margin.right) + "px)",
+    colors = ["#d89253", "#d3d3d3"],
+    ticks = [0, 500, 1000, 1500, 2000],
+    xScale = d3.scaleLinear()
+      .range([0, 100])
+      .domain([0, d3.max(delegates, d => d.total)]),
+    yScale = d3.scaleBand()
+      .domain(candidates.map(d => d.last))
+      .range([0, height])
+      .paddingInner(0.2),
+    yAxis = d3.axisLeft()
+      .scale(yAxis);
 %><!doctype html>
 <html lang="en-US">
   <head>
@@ -18,7 +38,6 @@
       <%= t.include("partials/_dataLayer.html") %>
       <%= t.include("partials/_gtm.html") %>
     <% } %>
-    <meta http-equiv="refresh" content="60">
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
@@ -26,41 +45,23 @@
       <%= t.include("partials/_gtmNoScript.html") %>
     <% } %>
     <responsive-child>
-      <main class="interactive">
-        <h1>Presidential primary results</h1>
-        <p class="note note--timestamp">Last updated <%= timestamp %></p>
-        <div class="flexbox">
-          <div id="map">
-            <div id="tooltip" class="hidden"></div>
-            <p class="instructions">Select a county to see results.</p>
-            <%= t.include("assets/countyMap.svg") %>
-          </div>
-          <div class="results-container">
-            <div class="results" id="statewide-results">
-              <h2>Washington state</h2>
-              <p class="note note--precincts"><span><%= results.reportingPercentage %></span>% of precincts reporting</p>
-              <div class="candidates">
-                <% sorted_candidates.forEach(function(candidate) { %>
-                  <p class="candidate <%= candidate.dropped_out ? 'dropout' : '' %>"><span class="color-block <%= candidate.last %>"></span><%= candidate.last %>: <%= (results.candidates.find(c => c.last === candidate.last).percentage === null) ? 0 : results.candidates.find(c => c.last === candidate.last).percentage.toFixed(1) %>%</p>
-                <% }); %>
+      <main class="interactive interactive--delegates">
+        <h1 class="widget__hed">Total Democratic delegates awarded</h1>
+        <p class="note widget__note">Last updated <%= printdate %></p>
+        <p class="graphic-chatter">1,991 delegates are needed to secure nomination on the first ballot at the Democratic National Convention.</p>
+        <div class="chart-outer" style="width: <%= width %>; height: <%= height %>px">
+          <div class="chart-inner" style="left: 0; top: <%= margin.top %>px">
+            <% sorted_candidates.forEach(function(c, i) { %>
+              <div class="chart__g" style="left: 0; top: <%= yScale(c.last) %>px;">
+                <p class="graphic-text graphic-text--small names" style="width: <%= margin.left %>px;"><%= c.last %></p>
+                <div class="chart__bar" style="left: <%= margin.left %>px; width: <%= xScale(delegates.find(a => a.name === c.last).total) %>%; height: <%= yScale.bandwidth() %>px;"></div>
+                <p class="graphic-text graphic-text--small numbers" style="top: 0; left: <%= xScale(delegates.find(a => a.name === c.last).total) %>%; margin-left: <%= margin.left + 5 %>px"><%= delegates.find(a => a.name === c.last).total %></p>
               </div>
-            </div>
-            <div class="results">
-              <select id="county-selector" class="selector">
-                <% counties.forEach(function(county) { %>
-                  <option value="<%= county.key %>"><%= county.county %></option>
-                <% }); %>
-              </select>
-              <div id="county-results" class="hidden">
-                <p class="note note--precincts"><span id="reporting-percentage"></span>% of precincts reporting</p>
-                <div class="candidates" id="county-results__candidates">
-                </div>
-              </div>
-            </div>
+            <% }) %>
           </div>
         </div>
-        <div class="caption">
-          <p class="data-source">Note: Candidates in gray have dropped out of the race. Source: Associated Press</p>
+        <div class="delegates__caption">
+          <p class="data-source">Source: The Associated Press</p>
           <p class="art-credit">Hilary Fung / The Seattle Times</p>
         </div>
       </main>
